@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    ports:
+     - "6379:6379"
+    volumes:
+     - "/tmp/redis:/data"
+  rabbitmq:
+    image: crochik/rabbitmq:3.7-stomp
+    ports:
+     - "15672:15672"
+     - "5672:5672"
+     - "15674:15674"
+    volumes:
+     - "/tmp/rabbitmq:/var/lib/rabbitmq"
+  mongo:
+    image: crochik/mongo:3.2
+    ports:
+     - "27017:27017"
+    volumes:
+     - "/tmp/mongo:/data/db"
