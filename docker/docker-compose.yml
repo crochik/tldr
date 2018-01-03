@@ -6,7 +6,7 @@ services:
     ports:
      - "6379:6379"
     volumes:
-     - "/tmp/redis:/data"
+     - "./data/redis:/data"
   rabbitmq:
     image: crochik/rabbitmq:3.7-stomp
     ports:
@@ -14,10 +14,10 @@ services:
      - "5672:5672"
      - "15674:15674"
     volumes:
-     - "/tmp/rabbitmq:/var/lib/rabbitmq"
+     - "./data/rabbitmq:/var/lib/rabbitmq"
   mongo:
     image: crochik/mongo:3.2
     ports:
      - "27017:27017"
     volumes:
-     - "/tmp/mongo:/data/db"
+     - "./data/mongo:/data/db"
