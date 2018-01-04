@@ -23,7 +23,7 @@ services:
     image: crochik/redis-browser:latest
     restart: always
     environment:
-    - host=local
+    - host=redis
     - port=6379
     ports:
     - 8082:4567  
