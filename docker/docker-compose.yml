@@ -2,12 +2,24 @@ version: '3'
 
 services:
   redis:
+    container_name: redis
     image: redis
     ports:
      - "6379:6379"
     volumes:
      - "./data/redis:/data"
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    build: .
+    restart: always
+    environment:
+    - REDIS_HOSTS=local:redis:6379
+    ports:
+    - 8081:8081
   rabbitmq:
+    container_name: rabbitmq
     image: crochik/rabbitmq:3.7-stomp
     ports:
      - "15672:15672"
@@ -16,6 +28,7 @@ services:
     volumes:
      - "./data/rabbitmq:/var/lib/rabbitmq"
   mongo:
+    container_name: mongo
     image: crochik/mongo:3.2
     ports:
      - "27017:27017"
