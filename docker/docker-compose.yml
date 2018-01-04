@@ -12,12 +12,21 @@ services:
     container_name: redis-commander
     hostname: redis-commander
     image: rediscommander/redis-commander:latest
-    build: .
     restart: always
     environment:
     - REDIS_HOSTS=local:redis:6379
     ports:
     - 8081:8081
+  redis-browser:
+    container_name: redis-browser
+    hostname: redis-browser
+    image: crochik/redis-browser:latest
+    restart: always
+    environment:
+    - host=local
+    - port=6379
+    ports:
+    - 8082:4567  
   rabbitmq:
     container_name: rabbitmq
     image: crochik/rabbitmq:3.7-stomp
