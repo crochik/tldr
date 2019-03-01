@@ -28,7 +28,7 @@ write_files:
     content: |
       #!/bin/bash
       wait-for-docker
-      docker run -d nginx      
+      docker run --name portainer -d -v /var/run/docker.sock:/var/run/docker.sock -p 9000:9000 portainer/portainer
 runcmd:
   - [ touch, /home/rancher/test2.txt ]
   - echo "test2" > /home/rancher/test3.txt
