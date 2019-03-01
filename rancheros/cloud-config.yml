@@ -18,17 +18,73 @@ rancher:
         - 8.8.8.8
         - 8.8.4.4
 write_files:
-  - path: /home/rancher/test.txt
+  - path: /home/rancher/.env
     owner: rancher
     content: |
-      this is getting fun
+      COMPOSE_PROJECT_NAME=guacamole
+      DATABASE_NAME=guacamole_db
+      DATABASE_USER=dbadmin
+      DATABASE_PASSWORD=N0tS4f3!
+      PORT=8080
+  - path: /home/rancher/Dockerfile
+    owner: rancher
+    content: |
+      # generate sql file
+      FROM guacamole/guacamole as guacamole
+      WORKDIR /opt/guacamole/bin/
+      RUN /opt/guacamole/bin/initdb.sh --postgres > /opt/guacamole/bin/initdb.sql
+
+      # generate postgres with init script
+      FROM postgres
+      WORKDIR /docker-entrypoint-initdb.d/
+      COPY --from=guacamole /opt/guacamole/bin/initdb.sql /docker-entrypoint-initdb.d/        
+  - path: /home/rancher/docker-compose.yml
+    owner: rancher
+    content: |
+      version: '3'
+
+      services:
+        postgres:
+          environment:
+            PGDATA: /var/lib/postgresql/data/guacamole
+            POSTGRES_DB: ${DATABASE_NAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_USER: ${DATABASE_USER}
+          build: 
+            context: .
+            dockerfile: Dockerfile
+          restart: always
+          volumes:
+            - ${PWD}/postgresql:/var/lib/postgresql/data:rw
+
+        guacd:
+          image: guacamole/guacd:latest
+          restart: always
+
+        guacamole:
+          image: guacamole/guacamole:latest
+          restart: always
+          ports:
+            - ${PORT}:8080
+          environment:
+            GUACD_HOSTNAME: guacd
+            POSTGRES_DATABASE: ${DATABASE_NAME}
+            POSTGRES_HOSTNAME: postgres
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_USER: ${DATABASE_USER}
+        portainer:
+          image: portainer/portainer
+          ports:
+            - 9000:9000
+          volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
   - path: /etc/rc.local
     permissions: "0755"
     owner: root
     content: |
       #!/bin/bash
       wait-for-docker
-      docker run --name portainer -d -v /var/run/docker.sock:/var/run/docker.sock -p 9000:9000 portainer/portainer
+      docker-compose -d -f /home/rancher/docker-compose.yml up
 runcmd:
   - [ touch, /home/rancher/test2.txt ]
   - echo "test2" > /home/rancher/test3.txt
