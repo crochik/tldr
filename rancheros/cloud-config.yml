@@ -23,24 +23,19 @@ rancher:
       restart: always
       ports:
         - 80:80
-
     postgres:
+      image: crochik/postgre:guacamole
       environment:
         PGDATA: /var/lib/postgresql/data/guacamole
         POSTGRES_DB: guacamole
         POSTGRES_PASSWORD: guacamole
         POSTGRES_USER: guacamole
-      build: 
-        context: .
-        dockerfile: Dockerfile
       restart: always
       volumes:
         - ${PWD}/postgresql:/var/lib/postgresql/data:rw
-
     guacd:
       image: guacamole/guacd:latest
       restart: always
-
     guacamole:
       image: guacamole/guacamole:latest
       restart: always
@@ -52,25 +47,10 @@ rancher:
         POSTGRES_HOSTNAME: postgres
         POSTGRES_PASSWORD: guacamole
         POSTGRES_USER: guacamole
-        
     portainer:
       image: portainer/portainer
       ports:
         - 9000:9000
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-
-# write_files:
-#   - path: /etc/rc.local
-#     permissions: "0755"
-#     owner: root
-#     content: |
-#       #!/bin/bash
-#       wait-for-docker
-#       wget -O /home/rancher/docker-compose https://github.com/docker/compose/releases/download/1.24.0-rc1/docker-compose-Linux-x86_64
-#       chmod a+x /home/rancher/docker-compose
-#       /home/rancher/docker-compose -f /home/rancher/docker-compose.yml up -d
-# runcmd:
-#   - echo "..."
-
 hostname: felipeos
