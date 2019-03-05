@@ -1,5 +1,5 @@
 #!/bin/sh
-docker run -d --rm --name socat \
+docker run -it --rm --name socat \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    --entrypoint sh
+    --entrypoint /bin/sh
     alpine/socat
