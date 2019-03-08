@@ -13,13 +13,19 @@ rancher:
     guacd:
       image: guacamole/guacd:latest
       restart: always
+      labels:
+        io.rancher.os.scope: "system"      
     abacate:
       image: crochik/abacate:latest
       restart: always  
+      labels:
+        io.rancher.os.scope: "system"      
     portainer:
       image: portainer/portainer
       ports:
         - 9000:9000
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
+      labels:
+        io.rancher.os.scope: "system"      
 hostname: felipeos
