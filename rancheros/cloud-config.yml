@@ -3,50 +3,18 @@ ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC++7VKa2plZdIB1IrdnTW69QQPReY3AKzzmMJU8AwlQ9J3GteaCiLBU/6nUfw7XycvKaGRxtOHuZCqDAbEc0aVAIXHTPRcpCcIGFwCSF2l5gpbPsIo6qAOgd9UaVBrdKD4SKAcsa8mmtWJO6bOzQLTU/kVn24/fW6LHqAbabciYCTCpr09HBSMWXwcI8ZJuAOil1LFoKd73JELCEupUPDMxpcrFEdcJvy9wjumnuBmknEt2zfv0yBHd1zc9xHviyNmyunn49Ap/b6DzT1I8fLJ4eeWexKuGtw9aPGcWrzKrHy/0z3/3Kr78wUHZD6y5AaotVpI8ov8dYjpZ53xFYPj felipe@md1rfbec
 rancher:
   resize_device: /dev/sda
-  docker:
-    # https://rancher.com/docs/os/v1.x/en/installation/configuration/docker/
-    # tls: true
-    # tls_args:
-    #   - "--tlsverify"
-    #   - "--tlscacert=/etc/docker/tls/ca.pem"
-    #   - "--tlscert=/etc/docker/tls/server-cert.pem"
-    #   - "--tlskey=/etc/docker/tls/server-key.pem"
-    #   - "-H=0.0.0.0:2376"    
   network:
     dns:
       nameservers:
         - 8.8.8.8
         - 8.8.4.4
   services:
-    nginxapp:
-      image: nginx
-      restart: always
-      ports:
-        - 80:80
-    postgres:
-      image: crochik/postgre:guacamole
-      environment:
-        PGDATA: /var/lib/postgresql/data/guacamole
-        POSTGRES_DB: guacamole
-        POSTGRES_PASSWORD: guacamole
-        POSTGRES_USER: guacamole
-      restart: always
-      volumes:
-        - ${PWD}/postgresql:/var/lib/postgresql/data:rw
     guacd:
       image: guacamole/guacd:latest
       restart: always
-    guacamole:
-      image: guacamole/guacamole:latest
-      restart: always
-      ports:
-        - 8080:8080
-      environment:
-        GUACD_HOSTNAME: guacd
-        POSTGRES_DATABASE: guacamole
-        POSTGRES_HOSTNAME: postgres
-        POSTGRES_PASSWORD: guacamole
-        POSTGRES_USER: guacamole
+    abacate:
+      image: crochik/abacate:latest
+      restart: always  
     portainer:
       image: portainer/portainer
       ports:
