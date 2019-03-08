@@ -14,6 +14,6 @@ docker pull guacamole/guacd:latest
 docker pull crochik/abacate:latest
 docker pull portainer/portainer
 
-docker save -o sda1/var/lib/rancher/preload/docker/docker-images.tar portainer/portainer crochik/abacate:latest guacamole/guacd:latest
+docker save -o sda1/var/lib/rancher/preload/system-docker/abacate.tar portainer/portainer crochik/abacate:latest guacamole/guacd:latest
 
 #reboot
