@@ -14,10 +14,12 @@ rancher:
       image: guacamole/guacd:latest
       restart: always
       labels:
-        io.rancher.os.scope: "system"      
+        io.rancher.os.scope: "system"
     abacate:
       image: crochik/abacate:latest
       restart: always  
+      ports:
+        - 8080:8080
       labels:
         io.rancher.os.scope: "system"      
     portainer:
