@@ -5,9 +5,10 @@
 </head>
 
 <body>
-    <form>
-        <input type="text" id="user" /><br />
-        <input type="password" id="password" /><br />
+    <form id="signup" method="post">
+        <input type="text" id="user" autocomplete="name email"><br />
+        <input type="password" id="password" autocomplete="password"/><br />
+        <input type="submit" id="submit" value="Submit"/>
         <input onclick="javascript:save()" type="button" value="Save" />
         <input onclick="javascript:load()" type="button" value="Load" /><br />
     </form>
@@ -31,6 +32,7 @@
                 password: {
                     email: user,
                     id: user,
+                    name: user,
                     password: pwd,
                 },
             };
@@ -41,6 +43,22 @@
             var res = await navigator.credentials.store(creds);
             console.log(res);
         }
+
+        function init() {
+            var f = document.querySelector('#signup');
+            f.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                console.log(e.target);
+                console.log(new FormData(e.target));
+                console.log(new PasswordCredential(e.target));
+                var c = await navigator.credentials.create({password: e.target});
+                console.log(c);
+                return navigator.credentials.store(c);                
+            });
+        }
+
+        init();
 
     </script>
 </body>
