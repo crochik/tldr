@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <title>Crdentials API</title>
+</head>
+
+<body>
+    <form>
+        <input type="text" id="user" /><br />
+        <input type="password" id="password" /><br />
+        <input onclick="javascript:save()" type="button" value="Save" />
+        <input onclick="javascript:load()" type="button" value="Load" /><br />
+    </form>
+
+    <script>
+        async function load() {
+			navigator.credentials.preventSilentAccess();
+			var creds = await navigator.credentials.get({
+				mediation: 'required',
+				password: true,
+			});
+
+            console.log(creds);
+        }
+
+        async function save() {
+            var user = document.getElementById('user').value;
+            var pwd = document.getElementById('password').value;
+
+            var payload = {
+                password: {
+                    email: user,
+                    id: user,
+                    password: pwd,
+                },
+            };
+
+            var creds = await navigator.credentials.create(payload);
+            console.log(creds);
+
+            var res = await navigator.credentials.store(creds);
+            console.log(res);
+        }
+
+    </script>
+</body>
+
+</html>
