@@ -1,4 +1,5 @@
 # Different tags
+* 3.8.3-delayed-message: management + rabbitmq-delayed-message plugin
 * 3.6-stomp, 3.7-stomp, (latest)stomp: rabbitmq:management + rabbitmq_web_stomp
 * shovel: crochik/rabbitmq:stomp + rabbitmq_shovel + rabbitmq_shovel_management 
 * funpack: crochik/shovel + rabbitmq_event_exchange
